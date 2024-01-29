@@ -2,9 +2,9 @@
 session_start(); // Start the session
 
 $servername = "localhost";
-$username = "root";
+$username = "";
 $password = "";
-$dbname = "ohio2";
+$dbname = "";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -17,9 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register"])) {
     $email = $_POST["email"];
     $password = $_POST["password"];
     $birthdate = $_POST["birthdate"];
-    $gender = $_POST["gender"];
-    $region = $_POST["region"];
-    $language = $_POST["language"];
 
     $check_username_sql = "SELECT * FROM users WHERE username='$username'";
     $check_email_sql = "SELECT * FROM users WHERE email='$email'";
@@ -36,8 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register"])) {
     } else {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO users (username, email, password, birthdate, gender, region, language)
-                VALUES ('$username', '$email', '$hashed_password', '$birthdate', '$gender', '$region', '$language')";
+        // Updated SQL query without gender, region, and language
+        $sql = "INSERT INTO users (username, email, password, birthdate)
+                VALUES ('$username', '$email', '$hashed_password', '$birthdate')";
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION["username"] = $username;
@@ -97,12 +95,14 @@ $conn->close();
         }
 
         #container {
-            display: flex;
-            background: #2a2a2a;
-            border-radius: 8px;
-            overflow: hidden;
-            width: 600px;
-        }
+    display: flex;
+    background: #2a2a2a;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 600px;
+    margin: 40px; /* Add this line for a margin of 40 pixels */
+}
+
 
         #login, #register {
             flex: 1;
@@ -141,9 +141,32 @@ $conn->close();
             border-radius: 4px;
         }
     </style>
+        <link rel="shortcut icon" href="WKM.png" />
 </head>
 <body>
-
+<script>
+        if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)){window.location.href="IE/index.html";}
+    </script>
+    <div id="container">
+        <div id="login">
+            <h2>Добро пожаловать на Webkm.ru!</h2>
+            <h2>Webkm это новая социальная сеть с возможностью переписки на стене</h2>
+            <h2>Вы сейчас находитесь на странице регистрации в которой вы можете войти в аккаунт или зарегестрировать новый</h2>
+            <h2>Удачи!</h2>
+            <a href="https://t.me/webkm2">
+                <img src="Files/images/telegram.png" alt="Изображение" style="width:55px;height:55px;border:0;">
+            </a>
+            <a href="https://vk.ru/webkm2">
+                <img src="Files/images/vk.png" alt="Изображение" style="width:55px;height:55px;border:0;">
+            </a>
+            <a href="https://discord.gg/DecxxqP8">
+                <img src="Files/images/discordd.png" alt="Изображение" style="width:55px;height:55px;border:0;">
+            </a>
+            <a href="https://www.youtube.com/channel/UCf71NNESaIHavwyKSYA6Swg">
+                <img src="Files/images/youtube.png" alt="Изображение" style="width:55px;height:55px;border:0;">
+            </a>
+        </div>
+    </div>
 <div id="container">
     <div id="login">
         <h2>Login</h2>
@@ -165,6 +188,6 @@ $conn->close();
         </form>
     </div>
 </div>
-
+<?php include "click.php"; ?>
 </body>
 </html>

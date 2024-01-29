@@ -1,149 +1,113 @@
-<?php
-// Начало сеанса
-session_start();
-
-// Проверка наличия SESSION переменной "Username"
-if (!isset($_SESSION['username'])) {
-    // Перенаправление на index.php, если "Username" отсутствует
-    header("Location: index.php");
-    exit();
-}
-
-// Если нажата кнопка выхода
-if (isset($_POST['logout'])) {
-    // Уничтожение текущей сессии
-    session_destroy();
-    // Перенаправление на index.php после выхода
-    header("Location: index.php");
-    exit();
-}
-
-// Если "Username" существует, продолжаем выполнение кода
-
-// Обработка отправки сообщения
-if (isset($_POST['send_message'])) {
-    // Подключение к базе данных (замените данными вашей конфигурации)
-    $mysqli = new mysqli("localhost", "root", "", "ohio2");
-
-    // Проверка наличия ошибок при подключении
-    if ($mysqli->connect_error) {
-        die("Ошибка подключения к базе данных: " . $mysqli->connect_error);
-    }
-
-    // Подготовка данных для вставки в базу данных
-    $username = $_SESSION['username'];
-    $message = $mysqli->real_escape_string($_POST['message']);
-
-    // Вставка сообщения в базу данных
-    $query = "INSERT INTO messages (username, message) VALUES ('$username', '$message')";
-    $result = $mysqli->query($query);
-
-    // Проверка наличия ошибок при выполнении запроса
-    if (!$result) {
-        die("Ошибка выполнения запроса: " . $mysqli->error);
-    }
-
-    // Закрытие соединения с базой данных
-    $mysqli->close();
-}
-
-// Получение сообщений из базы данных
-$mysqli = new mysqli("localhost", "root", "", "ohio2");
-if ($mysqli->connect_error) {
-    die("Ошибка подключения к базе данных: " . $mysqli->connect_error);
-}
-
-$query = "SELECT * FROM messages ORDER BY created_at DESC";
-$result = $mysqli->query($query);
-
-if (!$result) {
-    die("Ошибка выполнения запроса: " . $mysqli->error);
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Социальная сеть</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #2c3e50; /* Черный фон */
-            color: #ecf0f1; /* Белый текст */
-            margin: 0;
-            padding: 20px;
-        }
-
-        form {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #8e44ad; /* Фиолетовый текст */
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-        }
-
-        input[type="submit"] {
-            background-color: #8e44ad; /* Фиолетовая кнопка */
-            color: #ecf0f1;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #673AB7; /* Темно-фиолетовый при наведении */
-        }
-
-        h2 {
-            color: #8e44ad; /* Фиолетовый заголовок */
-        }
-
-        p {
-            margin: 0;
-            padding: 10px 0;
-            border-bottom: 1px solid #34495e; /* Темно-серый оттенок для разделителя */
-        }
-
-        em {
-            color: #3498db; /* Голубой цвет для времени */
-        }
-
-        form[name="logout"] {
-            margin-top: 20px;
-        }
-
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="WKM.png" />
 </head>
 <body>
-    <!-- Форма для отправки сообщения -->
-    <form method="post" action="">
+<script>
+        if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)){window.location.href="IE/index.html";}
+    </script>
+<?php
+// Assuming you have a function to establish a database connection
+include 'header.php';
+include 'db_connect.php';
+
+// Include the necessary PHP files
+include 'post_message.php';
+include 'display_messages.php';
+?>
+<h1>^</h1>
+<div class="message-container">
+    <form method="post" action="" enctype="multipart/form-data">
         <label for="message"></label>
-        <input type="text" name="message" id="message" required>
+        <textarea style="overflow:auto;resize:none" name="message" id="message" rows="1" cols="50" placeholder="Write your message here..." required></textarea>
+        <input type="file" name="photo" accept=".png, .jpg, .jpeg, .bmp">
         <input type="submit" name="send_message" value="Publicate">
     </form>
+</div>
+<div class="messanger">
+<?php
+include 'one_post_include.php';
+// Fetch and display messages
+$messagesPerPage = 40; // Number of messages to display per page
+$currentPage = isset($_GET['page']) ? $_GET['page'] : 1; // Get current page from URL parameter
 
-    <!-- Вывод сообщений всех пользователей -->
-    <?php
-    while ($row = $result->fetch_assoc()) {
-        echo "<p><strong>" . $row['username'] . ":</strong> " . $row['message'] . " <em>(" . $row['created_at'] . ")</em></p>";
+// Calculate the offset for fetching messages
+$offset = ($currentPage - 1) * $messagesPerPage;
+
+$query = "SELECT * FROM messages ORDER BY created_at DESC LIMIT $messagesPerPage OFFSET $offset";
+$result = $conn->query($query);
+
+
+// Display messages
+while ($row = $result->fetch_assoc()) {
+    echo '<div class="message-container">';
+
+    // Add a link to the user's personal page
+    echo '<p style="color: #ffffff;"><strong><a href="personal_page.php?username=' . $row['username'] . '" style="color: #ffffff; text-decoration: none;">' . $row['username'] . '</a></strong> <em>(' . $row['created_at'] . ')</em></p>';
+
+    echo "<p>" . htmlspecialchars($row['message']) . "</p>";
+
+    // Display photo if available
+    if (!empty($row['photo'])) {
+        echo "<p><img src='" . $row['photo'] . "' alt='User Photo' style='max-width: 300px; max-height: 300px;'></p>";
     }
-    ?>
 
-    <!-- Кнопка выхода -->
-    <form method="post" action="" name="logout">
-        <input type="submit" name="logout" value="Exit">
-    </form>
+    echo '<form method="post" action="" class="like-form">';
+    echo '<input type="hidden" name="message_id" value="' . $row['id'] . '">';
+
+    // Fetch and display the like count for the current message
+    $likeCountQuery = "SELECT COUNT(*) AS like_count FROM likes WHERE message_id = " . $row['id'];
+    $likeCountResult = $conn->query($likeCountQuery);
+    $likeCount = $likeCountResult->fetch_assoc()['like_count'];
+
+    echo '<button type="submit" name="like_message">';
+    echo 'Like <span class="like-count">' . $likeCount . '</span>'; // Display the like count
+    echo '</button>';
+    echo '</form>';
+
+    // View Comments button form
+    echo '<form method="get" action="comments.php" class="view-comments-form button-form">';
+    echo '<input type="hidden" name="message_id" value="' . $row['id'] . '">';
+    echo '<button type="submit" name="view_comments">';
+    echo 'View Comments';
+    echo '</button>';
+    echo '</form>';
+
+    echo '</div>';
+}
+?>
+</div>
+<h1>_</h1>
+
+<div class="footer">
+    <div class="pagination">
+        <?php
+        // Add pagination buttons
+        $totalMessages = $conn->query("SELECT COUNT(*) FROM messages")->fetch_row()[0];
+        $totalPages = ceil($totalMessages / $messagesPerPage);
+
+        // Display previous button
+        if ($currentPage > 1) {
+            echo '<a href="?page=' . ($currentPage - 1) . '">Previous</a>';
+        }
+
+        // Display page numbers
+        for ($i = 1; $i <= $totalPages; $i++) {
+            echo '<a href="?page=' . $i . '" ' . ($i == $currentPage ? 'class="active"' : '') . '>' . $i . '</a> ';
+        }
+
+        // Display next button
+        if ($currentPage < $totalPages) {
+            echo '<a href="?page=' . ($currentPage + 1) . '">Next</a>';
+        }
+        ?>
+    </div>
+</div>
+<?php include "click.php"; ?>
 </body>
 </html>
