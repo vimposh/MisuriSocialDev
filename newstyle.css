@@ -1,0 +1,257 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #0e0b14;
+}
+
+header {
+    background-color: rgb(103, 58, 182);
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+nav {
+    float: left;
+    width: 20%;
+    background-color: hsl(262, 52%, 47%, 15%);
+    padding: 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 50px;
+    height: calc(100% - 50px);
+    overflow-y: auto;
+}
+
+main {
+    float: left;
+    width: 80%;
+    padding: 15px;
+    box-sizing: border-box;
+    margin-top: 50px;
+    margin-left: 20%;
+}
+
+nav button, header button {
+    background-color: transparent;
+    color: #5c00ff;
+    border: none;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+nav button:hover, header button:hover {
+    background-color: #f0f2f500;
+}
+
+.post {
+    border: 1px solid hsl(262, 52%, 47%, 15%);
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: hsl(262, 52%, 47%, 15%);
+    position: relative;
+    border-radius: 10px;
+}
+
+.post-user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.post-user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.post-user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post-user-name {
+    font-weight: bold;
+    color: hsl(0, 0%, 100%, 80%);
+    margin-right: 10px;
+}
+
+.post-content {
+    margin-top: 10px;
+}
+
+.post-image {
+    max-width: 100%;
+    margin-top: 10px;
+}
+
+.post-actions {
+    display: flex;
+    margin-top: 10px;
+}
+
+.like-button,
+.comment-button {
+    background-color: transparent;
+    border: none;
+    margin-right: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #491a9a;
+    text-decoration: none; /* Remove default link styling */
+}
+
+.like-button:hover,
+.comment-button:hover {
+    text-decoration: underline;
+}
+
+.like-icon,
+.comment-icon {
+    margin-right: 5px;
+}
+
+.like-text,
+.comment-text {
+    font-size: 14px;
+    color: #fff;
+}
+
+.search-bar {
+    text-align: center;
+
+}
+
+.search-input {
+    width: 70%;
+    padding: 8px;
+    margin: 5px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 20px;
+}
+.searchForm {
+    width: 70%;
+    padding: 8px;
+    margin: 5px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 20px;
+}
+
+.search-button {
+    background-color: hsl(262, 52%, 47%, 95%);
+    color: #38383848;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.search-button:hover {
+    background-color: hsl(262, 52%, 47%, 85%);
+}
+
+.upload-photo-button {
+    background-color: hsl(262, 52%, 47%, 80%);
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 20px;
+    margin-top: 10px;
+}
+
+.upload-photo-button:hover {
+    background-color: hsl(262, 52%, 47%, 75%);
+}
+
+header div {
+    display: flex;
+}
+
+header button {
+    margin-left: 10px;
+}
+
+.icon {
+    margin-right: 8px;
+}
+
+.publish-block {
+    background-color: hsl(262, 52%, 47%, 15%);
+    border: 1px solid hsl(262, 52%, 47%, 15%);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.publish-textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background-color: hsl(262, 52%, 47%, 15%);
+    color: #fff;
+    border-color: #0e0b1400;
+}
+
+.publish-button {
+    background-color: hsl(262, 52%, 47%, 70%);
+    color: #ffffff00;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.publish-button:hover {
+    background-color: hsl(262, 52%, 47%, 65%);
+}
+.like-button,
+.comment-button {
+    background-color: hsl(262, 52%, 47%, 65%);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    color: hsl(262, 52%, 47%, 65%);;
+    text-decoration: none; /* Remove default link styling */
+}
+
+.like-button:hover,
+.comment-button:hover {
+    background-color: hsl(262, 52%, 47%, 50%);
+}
+
+.like-icon,
+.comment-icon {
+    margin-right: 5px;
+}
+
+.like-text,
+.comment-text {
+    font-size: 14px;
+    color: hsl(262, 52%, 47%, 65%);;
+}
